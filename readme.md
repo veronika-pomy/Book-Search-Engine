@@ -53,7 +53,9 @@ If you have any questions regarding this project, please don't hesitate to conta
 This list includes resources used for the project.
 
 - [Apollo GraphQL](https://www.apollographql.com/docs/)
+- [bcrypt](https://www.npmjs.com/package/bcrypt)
 - [Best README Template](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
+- [Express](https://expressjs.com/)
 - [concurrently](https://www.npmjs.com/package/concurrently)
 - [Heroku](https://devcenter.heroku.com/)
 - [MongoDB](https://www.mongodb.com/)
