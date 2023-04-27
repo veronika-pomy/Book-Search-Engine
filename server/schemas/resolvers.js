@@ -19,7 +19,7 @@ const resolvers = {
 
     Mutation: {
         // create a user and sign a token, then return them
-        createUser: async (parent, { username, email, password }) => {
+        addUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
 
             if (!user) {
@@ -62,7 +62,7 @@ const resolvers = {
             return res.status(400).json(err);
             }
         },
-        deleteBook: async (parent, { user, params }) => {
+        removeBook: async (parent, { user, params }) => {
             const updatedUser = await User.findOneAndUpdate(
                 { _id: user._id },
                 { $pull: { savedBooks: { bookId: params.bookId } } },
