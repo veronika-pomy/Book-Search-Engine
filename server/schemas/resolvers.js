@@ -3,18 +3,19 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        // get single user
-          me: async (parent, { user = null, params }) => {
+      // get single user
+        me: async (parent, args, context) => {
+          if (context.user) {
             const foundUser = await User.findOne({
-                $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
-              });
-          
-              if (!foundUser) {
-                return res.status(400).json({ message: 'Cannot find a user with this id!' });
-              }
-          
-              res.json(foundUser);
-          },
+              $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
+            });
+        
+            if (!foundUser) {
+              return res.status(400).json({ message: 'Cannot find a user with this id!' });
+            }
+            res.json(foundUser);
+        }
+      }    
     },
 
     Mutation: {
