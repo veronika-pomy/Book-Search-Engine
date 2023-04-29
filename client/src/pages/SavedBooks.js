@@ -12,7 +12,7 @@ const SavedBooks = () => {
   
   // authentication ??? 
 
-  const userData = data?.me || {};
+  const userData = data?.me || [];
 
   const [ deleteBook ] = useMutation(REMOVE_BOOK);
 
