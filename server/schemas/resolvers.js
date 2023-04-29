@@ -1,5 +1,6 @@
-const { User } = require('../models/User');
+const { User } = require('../models');
 const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
     Query: {
@@ -7,74 +8,75 @@ const resolvers = {
         me: async (parent, args, context) => {
           if (context.user) {
             const foundUser = await User.findOne({
-              $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
+              _id: context.user._id
             });
         
             if (!foundUser) {
-              return res.status(400).json({ message: 'Cannot find a user with this id!' });
+              throw new AuthenticationError('Couldn\'t find data for this user.');
             }
-            res.json(foundUser);
+            return foundUser;
         }
       }    
     },
 
     Mutation: {
         // create a user and sign a token, then return them
-        addUser: async (parent, { username, email, password }) => {
-            const user = await User.create({ username, email, password });
+        addUser: async (parent, args) => {
+            const user = await User.create(args);
 
             if (!user) {
-                return res.status(400).json({ message: 'Something is wrong!' });
-              }
+              throw new AuthenticationError('Something went wrong with adding user.');
+            }
 
             const token = signToken(user);
-            return res.json({ token, user });
+            return { token, user };
           },
         // log in user, find by email
-        login: async (parent, { body }) => {
-        const user = await User.findOne({ $or: [{ username: body.username }, { email: body.email }] });
+        login: async (parent, { email, password }) => {
+        const user = await User.findOne({email});
         
         // check if user exists 
         if (!user) {
-            return res.status(400).json({ message: "Can't find this user" });
+            throw new AuthenticationError('Wrong login credentials.');
           }
     
         // check password 
-        const correctPw = await user.isCorrectPassword(body.password);
+        const correctPw = await user.isCorrectPassword(password);
 
         if (!correctPw) {
-            return res.status(400).json({ message: 'Wrong password!' });
-          }
-        
+            throw new AuthenticationError('Wrong login credentials.');
+        }
+  
         const token = signToken(user);
-        res.json({ token, user });
+        return { token, user };
         },
-        saveBook: async (parent, { user, body }) => {
-            console.log(user);
-            try {
-            const updatedUser = await User.findOneAndUpdate(
-                { _id: user._id },
-                { $addToSet: { savedBooks: body } },
-                { new: true, runValidators: true }
+        saveBook: async (parent, args, context) => {
+          if (context.user) {
+            
+            const updatedUser =  await User.findByIdAndUpdate(
+              { _id: context.user._id },
+              { $addToSet: { savedBooks: args.input } },
+              { new: true }
             );
-            return res.json(updatedUser);
-            } catch (err) {
-            console.log(err);
-            return res.status(400).json(err);
-            }
+          
+            return updatedUser;
+
+          } else {
+            throw new AuthenticationError('Couldn\'t add book.');
+          }
         },
-        removeBook: async (parent, { user, params }) => {
+        removeBook: async (parent, args) => {
             const updatedUser = await User.findOneAndUpdate(
-                { _id: user._id },
-                { $pull: { savedBooks: { bookId: params.bookId } } },
+                { _id: args.user._id },
+                { $pull: { savedBooks: { bookId: args.bookId } } },
                 { new: true }
             );
 
             if (!updatedUser) {
-                return res.status(404).json({ message: "Couldn't find user with this id!" });
+              throw new AuthenticationError('Couldn\'t find user with this id.');
             }
 
-            return res.json(updatedUser);
+            return updatedUser;
         }
     }
 }
