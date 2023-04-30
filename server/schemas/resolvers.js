@@ -22,15 +22,11 @@ const resolvers = {
 
     Mutation: {
         // create a user and sign a token, then return them
-        addUser: async (parent, args) => {
-            const user = await User.create(args);
-
-            if (!user) {
-              throw new AuthenticationError('Something went wrong with adding user.');
-            }
-
-            const token = signToken(user);
-            return { token, user };
+        addUser: async (parent, { username, email, password }) => {
+          const user = await User.create({ username, email, password });
+          const token = signToken(user);
+    
+          return { token, user };
           },
         // log in user, find by email
         login: async (parent, { email, password }) => {
