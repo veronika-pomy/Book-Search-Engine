@@ -6,6 +6,7 @@ const resolvers = {
     Query: {
       // get single user
         me: async (parent, args, context) => {
+          console.log(context.user);
           if (context.user) {
             const foundUser = await User.findOne({
               _id: context.user._id
@@ -33,7 +34,7 @@ const resolvers = {
           },
         // log in user, find by email
         login: async (parent, { email, password }) => {
-        const user = await User.findOne({email});
+        const user = await User.findOne ( { email } );
         
         // check if user exists 
         if (!user) {
@@ -50,19 +51,18 @@ const resolvers = {
         const token = signToken(user);
         return { token, user };
         },
-        saveBook: async (parent, args, context) => {
+        saveBook: async (parent, { bookData }, context) => {
+          console.log(context.user);
           if (context.user) {
-            
             const updatedUser =  await User.findByIdAndUpdate(
               { _id: context.user._id },
-              { $addToSet: { savedBooks: args.input } },
+              { $push: { savedBooks: bookData } },
               { new: true }
             );
           
             return updatedUser;
-
           } else {
-            throw new AuthenticationError('Couldn\'t add book.');
+            throw new AuthenticationError('Can\'t add book.');
           }
         },
         removeBook: async (parent, args) => {
