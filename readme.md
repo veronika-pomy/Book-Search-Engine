@@ -38,7 +38,7 @@ You can check out the app following [this link.]()
 
 This video demonstrates app functionality when a user signs up.
 
-https://user-images.githubusercontent.com/111567114/235397833-2ce7e060-4bcf-43ab-8322-d95c472521e8.mov
+https://user-images.githubusercontent.com/111567114/235399815-2c097ac5-1446-4fa8-aae1-63593a058ce9.mov
 
 ---
 
