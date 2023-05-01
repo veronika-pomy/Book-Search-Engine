@@ -36,9 +36,9 @@ This app...
 
 You can check out the app following [this link.]()
 
-This screenshot demonstrates the application front-end.
+This video demonstrates app functionality when a user signs up.
 
-![insert link]()
+https://user-images.githubusercontent.com/111567114/235397833-2ce7e060-4bcf-43ab-8322-d95c472521e8.mov
 
 ---
 
