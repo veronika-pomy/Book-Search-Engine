@@ -18,10 +18,13 @@ const resolvers = {
         // create a user and sign a token, then return them
         addUser: async (parent, { username, email, password }) => {
           const user = await User.create({ username, email, password });
-          const token = signToken(user);
+          const userSaved = await User.findOne ( { email } );
           console.log(user);
+          const token = signToken(userSaved);
+          console.log(user);
+          console.log(userSaved);
           console.log(token);
-          return { token, user };
+          return { token, user, userSaved };
         },
         // log in user, find by email
         login: async (parent, { email, password }) => {
