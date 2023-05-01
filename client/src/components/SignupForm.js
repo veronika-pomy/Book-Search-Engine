@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import Auth from '../utils/auth';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
-import Auth from '../utils/auth';
+
 
 const SignupForm = () => {
   // set initial form state
@@ -35,9 +36,9 @@ const SignupForm = () => {
         variables: { ...userFormData },
       });
 
-      const { token, user } = data;
+      const { user } = data;
       console.log(user);
-      Auth.login(token);
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
