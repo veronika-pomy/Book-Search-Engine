@@ -2,11 +2,13 @@
 
 ## Description
 
-This app...
+This app enables readers to search for new books and keep a list for future purchases. 
 
 ---
 
 ## App functionality
+
+
 
 ---
 
