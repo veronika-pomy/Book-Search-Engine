@@ -92,7 +92,7 @@ THEN I am logged out of the site and presented with a menu with the options Sear
 
 ## Demo
 
-You can check out the app following [this link.]()
+You can check out the app following [this link.](https://google-books-search-engine.herokuapp.com)
 
 This video demonstrates app functionality when a user signs up.
 
